@@ -14,7 +14,7 @@ class TodoService(private val todoRepository: TodoRepository) {
         return todoRepository.save(newTodo)
     }
 
-    fun updateTodo(id:Long, completed: Boolean): Todo? {
+    fun updateTodo(id: Long, completed: Boolean): Todo? {
         val todo = todoRepository.findById(id)
 
         if (todo.isPresent) {
