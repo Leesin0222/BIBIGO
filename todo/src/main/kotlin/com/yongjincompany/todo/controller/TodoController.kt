@@ -1,7 +1,10 @@
 package com.yongjincompany.todo.controller
 
+import com.yongjincompany.todo.common.ApiResponse
 import com.yongjincompany.todo.dto.AddTodoRequest
+import com.yongjincompany.todo.dto.TodoResponse
 import com.yongjincompany.todo.entity.Todo
+import com.yongjincompany.todo.entity.toDto
 import com.yongjincompany.todo.service.TodoService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,23 +22,33 @@ import org.springframework.web.bind.annotation.RestController
 class TodoController(private val todoService: TodoService) {
 
     @GetMapping
-    fun getAllTodos(): List<Todo> = todoService.getAllTodos()
+    fun getAllTodos(): ApiResponse<List<TodoResponse>> {
+        val todoList = todoService.getAllTodos().map { it.toDto() }
+        return ApiResponse(success = true, data = todoList)
+    }
 
     @PostMapping
     fun addTodo(
         @RequestBody @Valid request: AddTodoRequest,
-    ): Todo = todoService.addTodo(request.title)
+    ): ApiResponse<TodoResponse> {
+        val todo = todoService.addTodo(request.title).toDto()
+        return ApiResponse(success = true, data = todo)
+    }
 
     @PutMapping("/{id}")
     fun updateTodo(
         @PathVariable id: Long,
         @RequestParam completed: Boolean,
-    ): Todo? = todoService.updateTodo(id, completed)
+    ): ApiResponse<TodoResponse?> {
+        val todo = todoService.updateTodo(id, completed)?.toDto()
+        return ApiResponse(success = todo != null, data = todo)
+    }
 
     @DeleteMapping("/{id}")
     fun deleteTodo(
         @PathVariable id: Long,
-    ) {
+    ): ApiResponse<String> {
         todoService.deleteTodo(id)
+        return ApiResponse(success = true, data = "삭제 완료")
     }
 }
