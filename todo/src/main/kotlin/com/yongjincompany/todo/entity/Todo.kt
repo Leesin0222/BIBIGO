@@ -1,5 +1,6 @@
 package com.yongjincompany.todo.entity
 
+import com.yongjincompany.todo.dto.TodoResponse
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -15,6 +16,13 @@ data class Todo(
 ) {
     constructor() : this(0L, "", false)
 }
+
+fun Todo.toDto(): TodoResponse =
+    TodoResponse(
+        id = this.id,
+        title = this.title,
+        completed = this.completed
+    )
 
 //JPA가 findById(id)를 호출할 때 내부적으로 리플렉션을 통해 해당 entity를 인스턴스화하고 DB에서 조회한 값들을 하나씩 객체에 채워나가기 때문에
 //data class에 JPA가 객체를 만들기 위한 임시 값을 넣기 위한 기본 생성자를 만들어야함.

@@ -1,6 +1,7 @@
 package com.yongjincompany.todo.service
 
 import com.yongjincompany.todo.entity.Todo
+import com.yongjincompany.todo.exception.TodoNotFoundException
 import com.yongjincompany.todo.repository.TodoRepository
 import org.springframework.stereotype.Service
 
@@ -15,17 +16,15 @@ class TodoService(private val todoRepository: TodoRepository) {
     }
 
     fun updateTodo(id: Long, completed: Boolean): Todo? {
-        val todo = todoRepository.findById(id)
-
-        if (todo.isPresent) {
-            val updated = todo.get().copy(completed = completed)
-            return todoRepository.save(updated)
-        }
-
-        return null
+        val todo = todoRepository.findById(id).orElseThrow { TodoNotFoundException() }
+        todo.completed = completed
+        return todoRepository.save(todo)
     }
 
     fun deleteTodo(id: Long) {
-        todoRepository.deleteById(id)
+        if (todoRepository.existsById(id))
+            todoRepository.deleteById(id)
+        else
+            throw TodoNotFoundException()
     }
 }
