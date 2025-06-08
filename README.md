@@ -6,3 +6,5 @@
 - [3일차 PR](https://github.com/Leesin0222/BIBIGO/pull/3)
 - 4일차 (알고리즘 문제 풀이로 인해 하루 쉼)
 - [5일차 PR](https://github.com/Leesin0222/BIBIGO/pull/4)
+- 6일차 (알고리즘 문제 풀이로 인해 하루 쉼)
+- 7일차 (알고리즘 문제 풀이로 인해 하루 쉼)
